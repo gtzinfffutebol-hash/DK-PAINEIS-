@@ -1,0 +1,397 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DK PAINEIS // VENDAS DE PRODUTOS INTEGRADOS EM FREEFIRE</title>
+    <!-- Importando fonte futurista do Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- VARIÁVEIS DE ESTILO (Fácil Edição de Cores) --- */
+        :root {
+            --bg-deep: #050505;
+            --bg-panel: #0d0d0d;
+            --primary-red: #ff003c;
+            --primary-red-glow: rgba(255, 0, 60, 0.6);
+            --neon-black: #111111;
+            --text-main: #f0f0f0;
+            --text-muted: #888888;
+            --border-glow: #ff003c;
+            --font-title: 'Orbitron', sans-serif;
+            --font-body: 'Rajdhani', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            background-image: 
+                radial-gradient(circle at 50% 10%, rgba(255, 0, 60, 0.08) 0%, transparent 60%),
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 100%, 100% 4px;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        /* --- CABEÇALHO --- */
+        header {
+            background: linear-gradient(180deg, rgba(15,0,5,0.9) 0%, rgba(5,5,5,0.8) 100%);
+            border-bottom: 2px solid var(--primary-red);
+            box-shadow: 0 0 20px var(--primary-red-glow);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: var(--font-title);
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 10px var(--primary-red);
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: var(--primary-red);
+        }
+
+        .cart-btn {
+            background: var(--neon-black);
+            border: 1px solid var(--primary-red);
+            color: #fff;
+            padding: 10px 20px;
+            font-family: var(--font-title);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 0 10px rgba(255, 0, 60, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-btn:hover {
+            background: var(--primary-red);
+            box-shadow: 0 0 15px var(--primary-red);
+        }
+
+        /* --- CONTEÚDO PRINCIPAL --- */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .banner {
+            background: linear-gradient(90deg, #1a0005 0%, #0a0a0a 100%);
+            border-left: 5px solid var(--primary-red);
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.8);
+        }
+
+        .banner h1 {
+            font-family: var(--font-title);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .banner p {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        /* --- CATEGORIAS / FILTROS --- */
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: var(--bg-panel);
+            border: 1px solid #333;
+            color: var(--text-muted);
+            padding: 8px 18px;
+            font-family: var(--font-title);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            border-color: var(--primary-red);
+            color: #fff;
+            background: rgba(255, 0, 60, 0.1);
+            box-shadow: 0 0 8px var(--primary-red-glow);
+        }
+
+        /* --- GRADE DE PRODUTOS --- */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: var(--bg-panel);
+            border: 1px solid #222;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary-red);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover {
+            border-color: var(--primary-red);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(255, 0, 60, 0.2);
+        }
+
+        .product-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid #222;
+        }
+
+        .product-info {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--primary-red);
+            font-family: var(--font-title);
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .product-title {
+            font-family: var(--font-title);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .product-desc {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .product-price {
+            font-family: var(--font-title);
+            font-size: 1.2rem;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .buy-btn {
+            background: var(--primary-red);
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            font-family: var(--font-title);
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+
+        .buy-btn:hover {
+            background: #ff194d;
+            box-shadow: 0 0 10px var(--primary-red);
+        }
+
+        /* --- RODAPÉ --- */
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid #1a1a1a;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CABEÇALHO -->
+    <header>
+        <div class="logo">DK<span>PAINEIS</span></div>
+        <button class="cart-btn" onclick="alert('Carrinho Integrado!')">
+          ⚡Carrinho⚡   <span id="cart-count"></span>
+        </button>
+    </header>
+
+    <!-- CONTAINER PRINCIPAL -->
+    <div class="container">
+        
+        <!-- BANNER DE DESTAQUE -->
+        <div class="banner">
+            <h1>DK PAINEIS FACILITA SUA COMPRA</h1>
+            <p>Adquira packs,acessos,keys e passes no nosso servidor.</p>
+        </div>
+
+        <!-- FILTROS DE CATEGORIA -->
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterProducts('all')">TODOS</button>
+            <button class="filter-btn" onclick="filterProducts('skins')">ACESSO PANEL</button>
+            <button class="filter-btn" onclick="filterProducts('currency')">MOEDAS</button>
+            <button class="filter-btn" onclick="filterProducts('passes')">PASSES</button>
+        </div>
+
+        <!-- GRADE DE PRODUTOS (Você pode editar, adicionar ou remover cards aqui) -->
+        <div class="product-grid" id="product-grid">
+            
+            <!-- Item 1 -->
+            <div class="product-card" data-category="skins">
+                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500&auto=format&fit=crop&q=60" alt="Skin Arma" class="product-image">
+                <div class="product-info">
+                    <div>
+                        <div class="product-tag">//PAINEL//</div>
+                        <h3 class="product-title">ACESSO AO PAINEL </h3>
+                        <p class="product-desc">5 DIAS </p>
+                    </div>
+                    <div class="product-footer">
+                        <span class="product-price">R$ 5,49</span>
+                        <button class="buy-btn" onclick="addToCart('ACESSO AO PAINEL 5 DIAS')">Adquirir</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="product-card" data-category="currency">
+                <img src="https://images.unsplash.com/photo-1622979135225-d2ba269bc1df?w=500&auto=format&fit=crop&q=60" alt="Moedas" class="product-image">
+                <div class="product-info">
+                    <div>
+                        <div class="product-tag">// Moedas // </div>
+                        <h3 class="product-title">1.500 DK COINS</h3>
+                        <p class="product-desc">Moeda oficial do mapa para compra de AIMBOT/AUXILIO .</p>
+                    </div>
+                    <div class="product-footer">
+                        <span class="product-price">R$ 5,00</span>
+                        <button class="buy-btn" onclick="addToCart('1.500 MOEDAS DK ')">Adquirir</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="product-card" data-category="passes">
+                <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?w=500&auto=format&fit=crop&q=60" alt="Passe" class="product-image">
+                <div class="product-info">
+                    <div>
+                        <div class="product-tag">DK PAINEIS</div>
+                        <h3 class="product-title">PASSE BOOYAH FF </h3>
+                        <p class="product-desc">DESCONTO 10% .</p>
+                    </div>
+                    <div class="product-footer">
+                        <span class="product-price">R$ 4,00</span>
+                        <button class="buy-btn" onclick="addToCart('Passe Booyah ff ')">Adquirir</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="product-card" data-category="skins">
+                <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500&auto=format&fit=crop&q=60" alt="Luvas" class="product-image">
+                <div class="product-info">
+                    <div>
+                        <div class="product-tag">Épico // 3 UNIDADES</div>
+                        <h3 class="product-title">PACK DE KEYS DK</h3>
+                        <p class="product-desc">PACK DE KEYS PRIVADAS E PRAZO INFINITO.</p>
+                    </div>
+                    <div class="product-footer">
+                        <span class="product-price">R$ 5,00</span>
+                        <button class="buy-btn" onclick="addToCart('Pack de keys 3 UNI')">Adquirir</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- RODAPÉ -->
+    <footer>
+        <p>&copy; 2026 DK PAINEIS. Todos os direitos reservados para suas compras no app.</p>
+    </footer>
+
+    <!-- JAVASCRIPT DE CONTROLE -->
+    <script>
+        let cartCount = 0;
+
+        // Função simples para simular adicionar ao carrinho
+        function addToCart(productName) {
+            cartCount++;
+            document.getElementById('cart-count').innerText = cartCount;
+            alert(`Item "${productName}" adicionado ao carrinho com sucesso!`);
+        }
+
+        // Função de filtro por categoria
+        function filterProducts(category) {
+            const cards = document.querySelectorAll('.product-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            // Atualiza o botão ativo visualmente
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Mostra ou oculta os produtos com base na categoria
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
